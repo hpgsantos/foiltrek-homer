@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script defer src="./js/foildest.js"></script>
+    <script defer src="./js/helpers/template.js"></script>
+    <script defer>
+
+        window.onload = async function() {
+            
+            
+            /*DOM elements*/
+
+            const divRowCards = document.querySelector('#row-cards');
+            const btnFoilTrek = document.querySelector('#btn-foil-trek');
+
+            btnFoilTrek.onclick = async () => {
+               
+                let foils = await foil();
+                let domNode = await apllyDom();
+                let strHTML = getTemplate();
+
+                setTemplate({"CARD-TITLE":'amor',"CARD-TITLE":'amor love'});
+
+               
+               (divRowCards.childNodes && divRowCards.childNodes.length > 0) ? divRowCards.insertBefore(domNode.body, divRowCards.childNodes[0]) : divRowCards.appendChild(domNode.body);
+
+            }
+
+        
+        }
+    </script>
+
+    <title>Foiltrek</title>
+  </head>
+  <body>
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading -->
+    <h1 class="my-4">Foil your destinations
+      <small>&nbsp;</small>
+    </h1>
+
+
+    <form>
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">Origem</div>
+                  </div>
+                  <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="BSB">
+                </div>
+            </div>
+          <div class="col-auto">
+            <label class="sr-only" for="inlineFormInputGroup">Username</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">Destino</div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="CGH">
+            </div>
+          </div>
+          <div class="col-auto">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+              <label class="form-check-label" for="autoSizingCheck">
+                Ida e Volta
+              </label>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button type="button" id="btn-foil-trek" class="btn btn btn-outline-primary mb-2">Expand it</button>
+          </div>
+        </div>
+      </form>
+    
+    <span class="mb-4" ></span>
+    <div id="row-cards" class="card-columns" >
+    </div>
+
+
+
+  </div>
+  <!-- /.container -->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
