@@ -4,6 +4,7 @@
 const foil = async () => {
     var foils = null;
     foils = JSON.parse('[[["BSB-CGH",0,1,"08/01/2019"],["CGH-BSB",0,-1,"21/02/2019"]],[["CGH-BSB",1,1,"10/01/2019"],["BSB-CGH",1,-1,"19/02/2019"]]]');
+    
     return foils;
 }
 

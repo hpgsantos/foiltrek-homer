@@ -22,14 +22,30 @@
             btnFoilTrek.onclick = async () => {
                
                 let foils = await foil();
-                let domNode = await apllyDom();
-                let strHTML = getTemplate();
+               
+                foils.map((trek,idx)=>{
+                    
+                    let trekRouteDepart = trek[0][0];
+                    let trekRouteArrive = trek[1][0];
 
-                setTemplate({"CARD-TITLE":'amor',"CARD-TITLE":'amor love'});
+                    let trekRoute = trekRouteDepart + '-' + trekRouteArrive;
+                    
+                    let strHTML =  setTemplate({'[CARD-TITLE]':trekRoute});
+                    let domNode = apllyDom(strHTML);
+
+                    (divRowCards.childNodes && divRowCards.childNodes.length > 0) ? divRowCards.insertBefore(domNode, divRowCards.childNodes[0]) : divRowCards.appendChild(domNoded);
+
+                    let arrDom = new Array(2);
+
+                    arrDom[0] =  apllyDom(`<li class="list-group-item">${trekRouteDepart} em ${trek[0][3]}</li>`);               
+                    arrDom[1] = apllyDom(`<li class="list-group-item">${trekRouteArrive} em ${trek[1][3]}</li>`);               
+
+        
+                    appendElement('opas',domNode,arrDom)
+                })
 
                
-               (divRowCards.childNodes && divRowCards.childNodes.length > 0) ? divRowCards.insertBefore(domNode.body, divRowCards.childNodes[0]) : divRowCards.appendChild(domNode.body);
-
+        
             }
 
         
