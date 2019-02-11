@@ -36,7 +36,7 @@ const resolveDomMapping = (el) => {
 
                 switch(el.type){
                     case 'text':
-                        trekObj[corrName] = elValue;
+                        trekObj[corrName] = elValue.toUpperCase();
                         break;
                     case 'date':
                         trekObj[corrName] ? trekObj[corrName].push(elValue) : trekObj[corrName] = [elValue];

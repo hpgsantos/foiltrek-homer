@@ -7,22 +7,43 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <script defer src="./js/foildest.js"></script>
     <script src="./js/helpers/parser.js"></script>
+    <script src="./js/helpers/range-dates.js"></script>
+    
+    <script defer src="./js/foildest.js"></script>
     <script defer src="./js/helpers/template.js"></script>
     
     <script defer>
 
         window.onload = async function() {
             
+            let nextfr = nextFriday();
+            
+            let nexfrPlusTwo = addDays(nextfr,2);
+
+            nextfr = nextfr.toISOString().substr(0,10);
+            nexfrPlusTwo = nexfrPlusTwo.toISOString().substr(0,10);
+            
+            const iptDateDep = document.querySelector('#dateDeparture');
+            const iptDateRet = document.querySelector('#dateReturn');
+
+            const divRowCards = document.querySelector('#row-cards');
+            const btnFoilTrek = document.querySelector('#btn-foil-trek');
+            
+
+            if(iptDateDep){
+              iptDateDep.value = nextfr;
+            }
+
+            if(iptDateRet){
+              iptDateRet.value = nexfrPlusTwo;
+            }
+         
           
-            /*DOM elements*/
-            //const URI = 'https://www.viajanet.com.br/busca/passagens/voos#';
             //https://www.viajanet.com.br/busca/passagens/voos#/BSB/CGH/RT/05-04-2019/08-04-2019/-/-/-/1/null/null/-/-/-/-
             var URI = 'https://www.viajanet.com.br/busca/passagens/voos#/[FROM]/[TO]/RT/[DATE_DEPARTURE]/[DATE_RETURN]/-/-/-/1/null/null/-/-/-/-';
             
-            const divRowCards = document.querySelector('#row-cards');
-            const btnFoilTrek = document.querySelector('#btn-foil-trek');
+
 
             btnFoilTrek.onclick = async () => {
                
@@ -74,8 +95,6 @@
                 (divRowCards.childNodes && divRowCards.childNodes.length > 0) ? divRowCards.insertBefore(domNode, divRowCards.childNodes[0]) : divRowCards.appendChild(domNoded);
 
             }
-
-  
         }
     </script>
 
@@ -90,62 +109,43 @@
       <small>&nbsp;</small>
     </h1>
 
-    <form>
+    <form id="trekForm">
       <div class="form-group">
-        <label for="exampleInputEmail1">Aeroporto de Origem</label>
-        <input type="text" class="form-control" id="exampleInputEmail1" maxlength="3" aria-describedby="origemHelp">
+        <label for="iptFrom01">Aeroporto de Origem</label>
+        <input id="iptFrom01" name="iptFrom01" type="text" value="BSB" class="form-control form-control-sm" maxlength="3" aria-describedby="origemHelp">
         <small id="origemHelp" class="form-text text-muted">Sigla do aeroporto em 3 letras maiúsculas</small>
       </div>
       <div class="form-group">
-        <label for="exampleInputEmail1">Aeroporto de Destino</label>
-        <input type="text" class="form-control" id="exampleInputEmail1" maxlength="3" aria-describedby="destinoHelp">
+        <label for="iptTo01">Aeroporto de Destino</label>
+        <input id="iptTo01" name="iptTo01" type="text" value="CGH" class="form-control form-control-sm" maxlength="3" aria-describedby="destinoHelp">
         <small id="destinoHelp" class="form-text text-muted">Sigla do aeroporto em 3 letras maiúsculas</small>
       </div>
-      <div class="form-check">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Data de Partida</label>
+        <input type="date" class="form-control form-control-sm" id="dateDeparture" name="dateDeparture" aria-describedby="destinoHelp">
+        <a href="#" class="badge badge-light">Hoje</a> <a href="#" class="badge badge-light">Pr&oacute;xima sexta</a>
+
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Data de Retorno</label>
+        <input type="date" class="form-control form-control-sm" id="dateReturn" name="dateReturn" aria-describedby="destinoHelp">
+        <small id="datePartidaHelp" class="form-text text-muted">Data de retorno dd/mm/aaaa</small>
+      </div> 
+
+      <div class="form-group">
+        <label for="exampleInputEmail1">Expandir</label>
+        <input type="number" id="qtdExpand" name="qtdExpand" class="form-control form-control-sm"  value="30" aria-describedby="destinoHelp">
+        <small id="datePartidaHelp" class="form-text text-muted">Numero de dias que o trajeto sera expandido</small>
+      </div> 
+
+      <div class="form-radio">
         <input type="radio" class="form-radio-input" id="rtRadio" checked>
         <label class="form-radio-label" for="rtRadio">Ida e Volta</label>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" id="btn-foil-trek" class="btn btn-sm btn-outline-primary mb-2">Expandir Trajetos</button>
+
     </form>
 
-
-    <form id="trekForm">
-        <div class="form-row align-items-center">
-            <div class="col-auto">
-                <label class="sr-only" for="iptFrom01">Username</label>
-                <div class="input-group mb-2">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">Origem</div>
-                  </div>
-                  <input type="text" class="form-control" id="iptFrom01" name="iptFrom01" placeholder="Origem" value="BSB">
-                </div>
-            </div>
-          <div class="col-auto">
-            <label class="sr-only" for="inlineFormInputGroup">Username</label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <div class="input-group-text">Destino</div>
-              </div>
-              <input type="text" class="form-control" id="iptTo01" name="iptTo01" placeholder="Destino" value="CGH">
-            </div>
-          </div>
-          <div class="col-auto">
-            <div class="form-radio mb-2">
-              <input class="form-radio-input" type="radio" id="autoSizingCheck" checked>
-              <label class="form-check-label" for="autoSizingCheck">
-                Ida e Volta
-              </label>
-            </div>
-          </div>
-          <div class="col-auto">
-            <button type="button" id="btn-foil-trek" class="btn btn btn-outline-primary mb-2">Expand it</button>
-          </div>
-        </div>
-        <div>
-            <input type="date" name="dateDeparture">
-            <input type="date" name="dateReturn">
-        </div>
-      </form>
     
     <span class="mb-4" ></span>
     <div id="row-cards" class="card-columns" >

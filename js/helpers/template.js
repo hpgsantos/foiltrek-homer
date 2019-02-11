@@ -1,19 +1,21 @@
 
 
 const template = `
-    <div class="card" style="width: 24rem;">
-        <div class="card-body">
-            <h5 class="card-title">[CARD-TITLE-PAIR-0]</h5>
-            <h6 class="card-subtitle mb-2 text-muted">[DATE-01-0] a [DATE-02-0]</h6>
-            <a href="[CARD-URI-PAIR-0]" class="card-link">Pesquisar Trecho</a>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">[CARD-TITLE-PAIR-1]</h5>
-            <h6 class="card-subtitle mb-2 text-muted">[DATE-01-1] a [DATE-02-1]</h6>
-            <a href="[CARD-URI-PAIR-1]" class="card-link">Pesquisar Trecho</a>
-
-        </div>
+<div class="card" style="width: 24rem;">
+    <div class="card-body">
+        <h5 class="card-title">[CARD-TITLE-PAIR-0]</h5>
+        <h6 class="card-subtitle mb-2 text-muted">[DATE-01-0] a [DATE-02-0]</h6>
+        <a href="[CARD-URI-PAIR-0]" class="card-link">Pesquisar Trecho</a>
     </div>
+    <div class="card-body">
+        <h5 class="card-title">[CARD-TITLE-PAIR-1]</h5>
+        <h6 class="card-subtitle mb-2 text-muted">[DATE-01-1] a [DATE-02-1]</h6>
+        <a href="[CARD-URI-PAIR-1]" class="card-link">Pesquisar Trecho</a>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted">Expandido em [CARD-DAYS-EXPANDED]</small>
+    </div>
+</div>
 `;
 
 const getTemplate = () => {
