@@ -8,47 +8,74 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <script defer src="./js/foildest.js"></script>
+    <script src="./js/helpers/parser.js"></script>
     <script defer src="./js/helpers/template.js"></script>
+    
     <script defer>
 
         window.onload = async function() {
             
-            
+          
             /*DOM elements*/
-
+            //const URI = 'https://www.viajanet.com.br/busca/passagens/voos#';
+            //https://www.viajanet.com.br/busca/passagens/voos#/BSB/CGH/RT/05-04-2019/08-04-2019/-/-/-/1/null/null/-/-/-/-
+            var URI = 'https://www.viajanet.com.br/busca/passagens/voos#/[FROM]/[TO]/RT/[DATE_DEPARTURE]/[DATE_RETURN]/-/-/-/1/null/null/-/-/-/-';
+            
             const divRowCards = document.querySelector('#row-cards');
             const btnFoilTrek = document.querySelector('#btn-foil-trek');
 
             btnFoilTrek.onclick = async () => {
                
-                let foils = await foil();
+                let elements = getDomElements('trekForm');
+                let trekObj = resolveDomMapping(elements);
+
+                let foils = await foil(trekObj);
+              
+                let strHTML = getTemplate();
                
-                foils.map((trek,idx)=>{
+                foils.map((trek,idx)=> {
                     
                     let trekRouteDepart = trek[0][0];
                     let trekRouteArrive = trek[1][0];
 
+                    let arrRouteTrek = trekRouteDepart.split('-');
                     let trekRoute = trekRouteDepart + '-' + trekRouteArrive;
-                    
-                    let strHTML =  setTemplate({'[CARD-TITLE]':trekRoute});
-                    let domNode = apllyDom(strHTML);
 
-                    (divRowCards.childNodes && divRowCards.childNodes.length > 0) ? divRowCards.insertBefore(domNode, divRowCards.childNodes[0]) : divRowCards.appendChild(domNoded);
+                    arrRouteTrek.length < 2 && (arrRouteTrek = trekRoute.split('-'));
+                 
+                    trekRoute = trekRoute + '-' + trekRouteDepart;
 
-                    let arrDom = new Array(2);
-
-                    arrDom[0] =  apllyDom(`<li class="list-group-item">${trekRouteDepart} em ${trek[0][3]}</li>`);               
-                    arrDom[1] = apllyDom(`<li class="list-group-item">${trekRouteArrive} em ${trek[1][3]}</li>`);               
-
-        
-                    appendElement('opas',domNode,arrDom)
-                })
-
+                    let uriTrek = mapReplace({
+                          '[FROM]':arrRouteTrek[0]
+                        , '[TO]':arrRouteTrek[1]
+                        , '[DATE_DEPARTURE]':trek[0][3].toString().replace(/\//g,'-')
+                        , '[DATE_RETURN]':trek[1][3].toString().replace(/\//g,'-')
+                      },URI)
+                 
                
+                    let date01 = '[DATE-01-'+idx+']';
+                    let date02 = '[DATE-02-'+idx+']';
+                    let cardURI = '[CARD-URI-PAIR-'+idx+']';
+                    let cardTitle = '[CARD-TITLE-PAIR-'+idx+']';
+
+                    let params = {};
         
+                    params[date01] = trek[0][3];
+                    params[date02] = trek[1][3];
+                    params[cardURI] = uriTrek;
+                    params[cardTitle] = trekRoute;
+
+                    strHTML =  mapReplace(params,strHTML);
+                })
+                
+                let domNode = apllyDom(strHTML);
+                let arrDom = new Array(2);
+        
+                (divRowCards.childNodes && divRowCards.childNodes.length > 0) ? divRowCards.insertBefore(domNode, divRowCards.childNodes[0]) : divRowCards.appendChild(domNoded);
+
             }
 
-        
+  
         }
     </script>
 
@@ -63,16 +90,34 @@
       <small>&nbsp;</small>
     </h1>
 
-
     <form>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Aeroporto de Origem</label>
+        <input type="text" class="form-control" id="exampleInputEmail1" maxlength="3" aria-describedby="origemHelp">
+        <small id="origemHelp" class="form-text text-muted">Sigla do aeroporto em 3 letras maiúsculas</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Aeroporto de Destino</label>
+        <input type="text" class="form-control" id="exampleInputEmail1" maxlength="3" aria-describedby="destinoHelp">
+        <small id="destinoHelp" class="form-text text-muted">Sigla do aeroporto em 3 letras maiúsculas</small>
+      </div>
+      <div class="form-check">
+        <input type="radio" class="form-radio-input" id="rtRadio" checked>
+        <label class="form-radio-label" for="rtRadio">Ida e Volta</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
+    <form id="trekForm">
         <div class="form-row align-items-center">
             <div class="col-auto">
-                <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                <label class="sr-only" for="iptFrom01">Username</label>
                 <div class="input-group mb-2">
                   <div class="input-group-prepend">
                     <div class="input-group-text">Origem</div>
                   </div>
-                  <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="BSB">
+                  <input type="text" class="form-control" id="iptFrom01" name="iptFrom01" placeholder="Origem" value="BSB">
                 </div>
             </div>
           <div class="col-auto">
@@ -81,12 +126,12 @@
               <div class="input-group-prepend">
                 <div class="input-group-text">Destino</div>
               </div>
-              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="CGH">
+              <input type="text" class="form-control" id="iptTo01" name="iptTo01" placeholder="Destino" value="CGH">
             </div>
           </div>
           <div class="col-auto">
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+            <div class="form-radio mb-2">
+              <input class="form-radio-input" type="radio" id="autoSizingCheck" checked>
               <label class="form-check-label" for="autoSizingCheck">
                 Ida e Volta
               </label>
@@ -95,6 +140,10 @@
           <div class="col-auto">
             <button type="button" id="btn-foil-trek" class="btn btn btn-outline-primary mb-2">Expand it</button>
           </div>
+        </div>
+        <div>
+            <input type="date" name="dateDeparture">
+            <input type="date" name="dateReturn">
         </div>
       </form>
     
