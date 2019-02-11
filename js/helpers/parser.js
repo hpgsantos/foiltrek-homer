@@ -19,11 +19,13 @@ const resolveDomMapping = (el) => {
         "iptTo01":"to",
         "dateDeparture":"dates",
         "dateReturn":"dates",
+        "qtdExpand":"ranges"
     }
 
     var mapped = {"type":"flight","trek":[]};
 
     var trekObj = {};
+    trekObj["ranges"] = [];
     
     Array.from(el).map((el,idx)=>{
         
@@ -40,9 +42,13 @@ const resolveDomMapping = (el) => {
                         break;
                     case 'date':
                         trekObj[corrName] ? trekObj[corrName].push(elValue) : trekObj[corrName] = [elValue];
+                        break;
+                    case 'number':
+                        trekObj[corrName].push(el.value);
+                    
                 }
         }
-        trekObj["ranges"] = [36];
+       
         trekObj["round"] = true;
 
     });

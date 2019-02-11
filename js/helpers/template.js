@@ -13,7 +13,7 @@ const template = `
         <a href="[CARD-URI-PAIR-1]" class="card-link">Pesquisar Trecho</a>
     </div>
     <div class="card-footer">
-        <small class="text-muted">Expandido em [CARD-DAYS-EXPANDED]</small>
+        <p><small class="text-muted">Expandido em [CARD-DAYS-EXPANDED]</small></p>
     </div>
 </div>
 `;
